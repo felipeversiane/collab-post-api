@@ -1,1 +1,1 @@
-from account.entities.user_account import *
+from account.entities.user_account import UserAccount as User

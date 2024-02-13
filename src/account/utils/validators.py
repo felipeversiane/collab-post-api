@@ -3,6 +3,8 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 import re
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+
 
 #Regex 
 PHONE_REGEX = r"^\d{11}$"
@@ -31,31 +33,15 @@ def validate_date(date):
         
 def validate_time(time):       
     if time < timezone.now().time():   
-        raise ValidationError(_("Invalid time."))   
-
-def validate_zipcode(zipcode):    
-    if not re.match(ZIPCODE_REGEX, zipcode):    
-        raise ValidationError(_("Invalid zipcode format."))
-    
-def validate_audio_file(value):
-    import os
-    ext = os.path.splitext(value.name)[1]  
-    if not ext.lower() in ['.wav','.mp3','.ogg']:
-        raise ValidationError(_("Only audio files are allowed."))
-    
-
-def validate_size_audio(value):
-    ...
-    filesize = value.file.size
-    if filesize > MAX_SIZE_AUDIO:
-        raise ValidationError(_("File too large. Maximum size is 20MB."))
-    
-def validate_size_image(value):
-    ...
-    filesize = value.file.size
-    if filesize > MAX_SIZE_IMAGE:
-        raise ValidationError(_("File too large. Maximum size is 20MB."))
+        raise ValidationError(_("Invalid time."))    
     
 def validate_birth_date(value):
     if not re.match(DATE_REGEX, value):
          raise ValidationError(_("Invalid date of birth."))
+    
+def validate_safe_text(value):
+    if re.search(r'<|>|&|;|\'|"|\/|\\', value):
+        raise ValidationError(
+            _("The text cannot contain dangerous special characters."),
+            code='invalid',
+        )

@@ -49,3 +49,10 @@ def validate_audio_file(value):
 def validate_birth_date(value):
     if not re.match(DATE_REGEX, value):
          raise ValidationError(_("Invalid date of birth."))
+    
+def validate_safe_text(value):
+    if re.search(r'<|>|&|;|\'|"|\/|\\', value):
+        raise ValidationError(
+            _("The text cannot contain dangerous special characters."),
+            code='invalid',
+        )
