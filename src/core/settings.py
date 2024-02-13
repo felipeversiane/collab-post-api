@@ -41,6 +41,8 @@ PREREQUISITE_APPS = [
     'celery',
     'djoser',
     'drf_yasg',
+    'social_django',
+
 ]
 
 PROJECT_APPS = [
@@ -149,6 +151,7 @@ THOUSAND_SEPARATOR = '.'
 
 # Authentication
 AUTHENTICATION_BACKENDS = [
+    'social_core.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
    
 ]
@@ -180,6 +183,15 @@ AUTH_COOKIE_HTTP_ONLY = True
 AUTH_COOKIE_PATH = '/'
 AUTH_COOKIE_SAMESITE = 'None'
 
+#Google OAuth Conf
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = getenv('GOOGLE_AUTH_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = getenv('GOOGLE_AUTH_SECRET_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile',
+    'openid'
+]
+SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name']
 
 
 # Static files (CSS, JavaScript, Images)
