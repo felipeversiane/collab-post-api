@@ -1,0 +1,17 @@
+
+    celery
+    Django==4.2
+    django-cors-headers
+    djangorestframework
+    djangorestframework-simplejwt
+    djoser
+    factory_boy
+    gunicorn
+    kombu
+    psycopg2
+    python-dotenv
+    redis
+    sqlparse
+    urllib3
+    drf-yasg
+    gettext
