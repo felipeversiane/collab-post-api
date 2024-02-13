@@ -3,14 +3,13 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 import re
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 #Regex 
 PHONE_REGEX = r"^\d{11}$"
 ZIPCODE_REGEX = r"^\d{5}-\d{3}$"
 DATE_REGEX = r'(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$'
 
-MAX_SIZE_AUDIO = 20000000 
-MAX_SIZE_IMAGE = 10000000
 
 def validate_first_letter(str):    
     if str[0].isdigit():        
@@ -46,18 +45,6 @@ def validate_audio_file(value):
     if not ext.lower() in ['.wav','.mp3','.ogg']:
         raise ValidationError(_("Only audio files are allowed."))
     
-
-def validate_size_audio(value):
-    ...
-    filesize = value.file.size
-    if filesize > MAX_SIZE_AUDIO:
-        raise ValidationError(_("File too large. Maximum size is 20MB."))
-    
-def validate_size_image(value):
-    ...
-    filesize = value.file.size
-    if filesize > MAX_SIZE_IMAGE:
-        raise ValidationError(_("File too large. Maximum size is 20MB."))
     
 def validate_birth_date(value):
     if not re.match(DATE_REGEX, value):
