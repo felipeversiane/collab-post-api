@@ -14,6 +14,5 @@
     sqlparse
     urllib3
     drf-yasg
-    gettext
     social-auth-app-django
     social-auth-core

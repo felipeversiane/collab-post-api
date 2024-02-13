@@ -3,7 +3,7 @@ from django.contrib.auth.models import (
     AbstractBaseUser,
     PermissionsMixin
 )
-from account.managers.user_account_manager import UserAccountManager
+from account.managers.user_account_manager import *
 
 
 class UserAccount(AbstractBaseUser, PermissionsMixin):
