@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 import uuid
 
 class EducationalBackground(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    uuid = models.UUIDField(primary_key=True, unique=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(get_user_model(),on_delete=models.CASCADE, related_name='educational_backgrounds', verbose_name=_('User'),null=False,blank=False)
     institution = models.CharField(max_length=70, verbose_name=_('Institution'), null=False, blank=False,validators=[validate_first_letter,validate_safe_text])
     degree = models.CharField(max_length=50, verbose_name=_('Degree'), null=False, blank=False,validators=[validate_first_letter,validate_safe_text])

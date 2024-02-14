@@ -13,8 +13,8 @@ class EducationalViewSet(viewsets.ModelViewSet):
     queryset = Educational.objects.all()
     serializer_class = EducationalSerializer
 
-    def list(self,*args, **kwargs):
-        queryset = Educational.filter(user=self.request.user)
+    def list(self,request,*args, **kwargs):
+        queryset = self.queryset.filter(user=request.user)  
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data,status=status.HTTP_200_OK)
     

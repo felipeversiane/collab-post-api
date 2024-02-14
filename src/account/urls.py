@@ -7,7 +7,7 @@ from django.conf.urls import include
 router = routers.DefaultRouter()
 router.register(r'job',views.JobViewSet, basename='jobs')
 router.register(r'educational',views.EducationalViewSet, basename='educational')
-router.register(r'competence',views.EducationalViewSet, basename='competence')
+router.register(r'competence',views.CompetenceViewSet, basename='competence')
 
 
 urlpatterns = [

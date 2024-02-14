@@ -9,7 +9,7 @@ from account.utils.validators import (validate_first_letter,validate_phone)
 import uuid
 
 class UserAccount(AbstractBaseUser, PermissionsMixin):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    uuid = models.UUIDField(primary_key=True, unique=True, default=uuid.uuid4, editable=False)
     first_name = models.CharField(max_length=255, verbose_name=_('First Name'),null=False,blank=False)
     last_name = models.CharField(max_length=255, verbose_name=_('Last Name'), null=False, blank=False)
     email = models.EmailField(unique=True, blank=False, null=False, max_length=255, verbose_name=_('Email'))

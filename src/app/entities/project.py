@@ -12,7 +12,7 @@ SITUATION_CHOICES = [
 ]
 
 class Project(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    uuid = models.UUIDField(primary_key=True, unique=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=60,null=False, blank=False, verbose_name=_('Title'),validators=[validate_first_letter,validate_letters])
     description = models.TextField(max_length=200,null=False, blank=False,verbose_name=_('Description'),validators=[validate_first_letter])
     budget = models.DecimalField(max_digits=10,null=False, blank=False,decimal_places=2,verbose_name=_('Budget'),validators=[validate_value])
