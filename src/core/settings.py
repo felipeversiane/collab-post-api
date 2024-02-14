@@ -92,6 +92,8 @@ CORS_ALLOWED_ORIGINS = getenv(
     'http://localhost:3000,http://127.0.0.1:3000'
 ).split(',')
 CORS_ALLOW_CREDENTIALS = True
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000','http://localhost:3000','http://127.0.0.1:3000']
+
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

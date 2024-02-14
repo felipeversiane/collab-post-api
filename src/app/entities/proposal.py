@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from app.entities.project import Project
 from django.utils.translation import gettext_lazy as _
 from app.utils.validators import *
+import uuid
 
 SITUATION_CHOICES = [
     ("W",_("Waiting")),
@@ -10,6 +11,7 @@ SITUATION_CHOICES = [
 ]
 
 class Proposal(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     project = models.ForeignKey(Project,null=False, blank=False, on_delete=models.CASCADE, verbose_name=_('Project'), related_name='proposals')
     freelancer = models.ForeignKey(get_user_model(),null=False, blank=False, on_delete=models.CASCADE,verbose_name=_('Freelancer'), related_name='proposals')
     cover_letter = models.TextField(max_length=200,null=False, blank=True,verbose_name=_('Letter'))

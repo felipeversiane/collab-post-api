@@ -1,1 +1,2 @@
-from rest_framework import viewsets
+from app.endpoints.project_views import *
+from app.endpoints.proposal_views import *

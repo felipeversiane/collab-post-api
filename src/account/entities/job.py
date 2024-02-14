@@ -2,7 +2,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from account.entities.competence import Competence
 from account.utils.validators import (validate_first_letter,validate_safe_text)
-
+from django.contrib.auth import get_user_model
+import uuid
 
 JOB_TYPE_CHOICES = [
         ("TR", _('Trainee')),
@@ -16,11 +17,13 @@ JOB_TYPE_CHOICES = [
 ]
 
 class Job(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(get_user_model(),on_delete=models.CASCADE, related_name='jobs', verbose_name=_('User'),null=False,blank=False)
     title = models.CharField(max_length=100, verbose_name=_('Job Title'), null=False, blank=False,validators=[validate_first_letter,validate_safe_text])
     company = models.CharField(max_length=70, verbose_name=_('Company'), null=False, blank=False,validators=[validate_safe_text])
     start_date = models.DateField(verbose_name=_('Start Date'), null=False, blank=False)
     end_date = models.DateField(verbose_name=_('End Date'), null=False, blank=True)
-    competences = models.ManyToManyField(Competence, related_name='jobs', verbose_name=_('Competences'), blank=True,null=False)
+    competences = models.ManyToManyField(Competence, related_name='jobs', verbose_name=_('Competences'), blank=True)
     job_type = models.CharField(max_length=2,default="FT", choices=JOB_TYPE_CHOICES,null=False,blank=False,verbose_name=_('Job Type'))
 
 
