@@ -6,12 +6,19 @@ from account.entities.education_background import EducationalBackground as Educa
 from account.serializers.educational_serializers import EducationalSerializer
 from rest_framework import viewsets,status
 from django.utils.translation import gettext_lazy as _
+from rest_framework.permissions import AllowAny
 
 
-@permission_classes([IsAuthenticated]) 
 class EducationalViewSet(viewsets.ModelViewSet):
     queryset = Educational.objects.all()
     serializer_class = EducationalSerializer
+
+    def get_permissions(self):
+        if self.action != 'get_educationals_by_user':
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]
 
     def list(self,request,*args, **kwargs):
         queryset = self.queryset.filter(user=request.user)  
@@ -30,10 +37,11 @@ class EducationalViewSet(viewsets.ModelViewSet):
         instance.delete()
         return Response({"message":_("Education deleted sucessfully.")},status=status.HTTP_204_NO_CONTENT)
     
-    def create(self, serializer,*args, **kwargs):
-        serializer.validated_data['user'] = self.request.user
-        serializer.save()
-        return Response({"message":_("Education created sucessfully.")},status=status.HTTP_201_CREATED)
+    def create(self, request,*args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(user=request.user)
+        return Response({"message":_("Job created successfully.")},status=status.HTTP_201_CREATED)
 
     def update(self, serializer,*args, **kwargs):
         item = self.get_object()
@@ -51,4 +59,13 @@ class EducationalViewSet(viewsets.ModelViewSet):
         serializer.save()
         return Response({"message":_("Education changed sucessfully.")},status=status.HTTP_204_NO_CONTENT)
 
+    @action(detail=False, methods=['GET'])
+    def get_educationals_by_user(self, request):
+        user_uuid = request.query_params.get('user')
+        if not user_uuid:
+            return Response({"message": _("User UUID is required")}, status=status.HTTP_400_BAD_REQUEST)
+
+        jobs = Educational.objects.filter(user=user_uuid)
+        serializer = self.get_serializer(jobs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     

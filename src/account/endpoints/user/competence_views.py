@@ -1,20 +1,24 @@
-from rest_framework.decorators import permission_classes,action
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.exceptions import PermissionDenied
 from account.entities.competence import Competence
 from account.serializers.competence_serializer import CompetenceSerializer
 from rest_framework import viewsets,status
 from django.utils.translation import gettext_lazy as _
+from rest_framework.permissions import AllowAny,IsAdminUser
 
 
-@permission_classes([IsAuthenticated]) 
 class CompetenceViewSet(viewsets.ModelViewSet):
     queryset = Competence.objects.all()
     serializer_class = CompetenceSerializer
 
+    def get_permissions(self):
+        if self.action != 'destroy':
+            permission_classes = [AllowAny]
+        else:
+            permission_classes = [IsAdminUser]
+        return [permission() for permission in permission_classes]
+
     def list(self,request,*args, **kwargs):
-        queryset = self.queryset.filter(user=request.user)  
+        queryset = self.queryset.all()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data,status=status.HTTP_200_OK)
         
