@@ -30,10 +30,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         return Response(serializer.data,status=status.HTTP_200_OK)
 
     def destroy(self, instance,*args, **kwargs):
-        if instance.user != self.request.user:
-                raise PermissionDenied({"message": _("Permission denied.")})
-        instance.delete()
-        return Response({"message":_("Education deleted sucessfully.")},status=status.HTTP_204_NO_CONTENT)
+        return Response({"message":_("You cannot delete a project.")},status=status.HTTP_405_METHOD_NOT_ALLOWED)
     
     def create(self, request,*args, **kwargs):
         serializer = self.get_serializer(data=request.data)
