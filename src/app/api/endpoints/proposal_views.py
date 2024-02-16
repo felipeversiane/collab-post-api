@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from app.entities.proposal import Proposal
-from app.serializers.proposal_serializers import ProposalSerializer
+from app.api.serializers.proposal_serializers import *
 from rest_framework import viewsets,status
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError

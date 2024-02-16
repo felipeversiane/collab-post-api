@@ -93,7 +93,15 @@ CORS_ALLOWED_ORIGINS = getenv(
 ).split(',')
 CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = ['http://localhost:8000','http://localhost:3000','http://127.0.0.1:3000']
-
+CORS_ALLOW_METHODS = [
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+CORS_ALLOW_HEADERS = ['accept', 'accept-encoding', 'authorization', 'content-type', 'dnt', 'origin', 'user-agent',
+                      'x-csrftoken', 'x-requested-with', ]
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -233,6 +241,17 @@ LOGGING = {
         },
     },
 }
+
+#Security plus settings
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+
+#Change this in production to True
+SECURE_SSL_REDIRECT = False
+SECURE_HSTS_SECONDS = 0
+SECURE_HSTS_PRELOAD = False
+SECURE_HSTS_INCLUDE_SUBDOMAINS = False
 
 try:
     from .local_settings import * # noqa : F403,F401

@@ -22,8 +22,8 @@ AREA_CHOICES = [
 class Project(models.Model):
 
     uuid = models.UUIDField(primary_key=True, unique=True, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=60,null=False, blank=False, verbose_name=_('Title'),validators=[validate_first_letter,validate_letters])
-    description = models.TextField(max_length=200,null=False, blank=False,verbose_name=_('Description'),validators=[validate_first_letter])
+    title = models.CharField(max_length=60,null=False, blank=False, verbose_name=_('Title'),validators=[validate_first_letter,validate_letters,validate_safe_text])
+    description = models.TextField(max_length=200,null=False, blank=False,verbose_name=_('Description'),validators=[validate_first_letter,validate_safe_text])
     budget = models.DecimalField(max_digits=10,null=False, blank=False,decimal_places=2,verbose_name=_('Budget'),validators=[validate_value])
     created_at = models.DateTimeField(auto_now_add=True,null=False, blank=False,verbose_name=_('Created Date'),validators=[validate_date])
     updated_at = models.DateTimeField(auto_now=True,null=False, blank=False,verbose_name=_('Updated Date'),validators=[validate_date])

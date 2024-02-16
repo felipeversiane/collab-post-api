@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from account.entities.competence import Competence
-from account.serializers.competence_serializer import CompetenceSerializer
+from account.api.serializers.competence_serializer import *
 from rest_framework import viewsets,status
 from django.utils.translation import gettext_lazy as _
 from rest_framework.permissions import AllowAny,IsAdminUser
