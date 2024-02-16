@@ -1,4 +1,4 @@
-from rest_framework.decorators import permission_classes,action
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
@@ -7,6 +7,7 @@ from account.serializers.educational_serializers import EducationalSerializer
 from rest_framework import viewsets,status
 from django.utils.translation import gettext_lazy as _
 from rest_framework.permissions import AllowAny
+from django.shortcuts import get_object_or_404
 
 
 class EducationalViewSet(viewsets.ModelViewSet):
@@ -60,12 +61,13 @@ class EducationalViewSet(viewsets.ModelViewSet):
         return Response({"message":_("Education changed sucessfully.")},status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=False, methods=['GET'])
-    def get_educationals_by_user(self, request):
+    def get_educational_by_user(self, request):
         user_uuid = request.query_params.get('user')
         if not user_uuid:
             return Response({"message": _("User UUID is required")}, status=status.HTTP_400_BAD_REQUEST)
-
-        jobs = Educational.objects.filter(user=user_uuid)
-        serializer = self.get_serializer(jobs, many=True)
+        educationals = get_object_or_404(Educational, user=user_uuid)
+        if educationals.user != request.user:
+            raise PermissionDenied({"message": _("You are not authorized to access proposals for this project.")})
+        serializer = self.get_serializer(educationals, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     

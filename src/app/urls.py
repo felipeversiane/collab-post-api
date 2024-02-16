@@ -8,6 +8,5 @@ router.register(r'project',views.ProjectViewSet,basename='project')
 router.register(r'proposal',views.ProposalViewSet,basename='proposal')
 
 urlpatterns = [
-    re_path('', include(router.urls)),
-    
+    re_path('', include(router.urls)), 
 ]

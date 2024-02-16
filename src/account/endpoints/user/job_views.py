@@ -1,4 +1,4 @@
-from rest_framework.decorators import permission_classes,action
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from account.entities.job import Job
@@ -7,6 +7,7 @@ from rest_framework import viewsets,status
 from django.utils.translation import gettext_lazy as _
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
+from django.shortcuts import get_object_or_404
 
 class JobViewSet(viewsets.ModelViewSet):
     queryset = Job.objects.all()
@@ -66,8 +67,9 @@ class JobViewSet(viewsets.ModelViewSet):
         user_uuid = request.query_params.get('user')
         if not user_uuid:
             return Response({"message": _("User UUID is required")}, status=status.HTTP_400_BAD_REQUEST)
-
-        jobs = Job.objects.filter(user=user_uuid)
+        jobs = get_object_or_404(Job, user=user_uuid)
+        if jobs.user != request.user:
+            raise PermissionDenied({"message": _("You are not authorized to access proposals for this project.")})
         serializer = self.get_serializer(jobs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     

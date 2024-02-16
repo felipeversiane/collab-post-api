@@ -1,4 +1,4 @@
-from rest_framework.decorators import permission_classes,action
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
@@ -36,7 +36,7 @@ class ProposalViewSet(viewsets.ModelViewSet):
     
     def create(self, request, *args, **kwargs):
         project_id = request.data.get('project')
-        existing_proposals = Proposal.objects.filter(project_id=project_id, freelancer=request.user)
+        existing_proposals = Proposal.objects.filter(project=project_id, freelancer=request.user)
         if existing_proposals.exists():
             raise ValidationError(_({"message":"You have already submitted a proposal for this project."},code='invalid'))
         serializer = self.get_serializer(data=request.data)
@@ -65,7 +65,7 @@ class ProposalViewSet(viewsets.ModelViewSet):
         return Response({"message":_("Education changed sucessfully.")},status=status.HTTP_204_NO_CONTENT)
     
     @action(detail=False, methods=['GET'])
-    def get_proposals_by_project(self, request):
+    def get_proposals_by_project(self,request,*args, **kwargs):
         project_uuid = request.query_params.get('project')
         if not project_uuid:
             return Response({"message": _("Project UUID is required.")}, status=status.HTTP_400_BAD_REQUEST)

@@ -1,4 +1,4 @@
-from rest_framework.decorators import permission_classes,action
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
@@ -7,7 +7,6 @@ from app.serializers.project_serializers import ProjectSerializer
 from rest_framework import viewsets,status
 from django.utils.translation import gettext_lazy as _
 from rest_framework.permissions import AllowAny
-
 
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
@@ -54,3 +53,22 @@ class ProjectViewSet(viewsets.ModelViewSet):
         serializer.save()
         return Response({"message":_("Education changed sucessfully.")},status=status.HTTP_204_NO_CONTENT)
     
+    @action(detail=False, methods=['GET'])
+    def get_projects_by_situation(self, request,*args, **kwargs):
+        situation = request.query_params.get('situation')
+        situations = ['W', 'O', 'B', 'F']
+        if situation not in situations:
+            return Response({"message": _("Invalid situation parameter.")}, status=status.HTTP_400_BAD_REQUEST)
+        
+        queryset = self.queryset.filter(situation=situation,employer=request.user)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(detail=False, methods=['GET'])
+    def get_budget_mean_by_area(self, request, *args, **kwargs):
+        areas = ["FS", "FE", "BE", "GM"]
+        area = request.query_params.get('area')
+        if area not in areas:
+            return Response({"message": _("Invalid area parameter.")}, status=status.HTTP_400_BAD_REQUEST)
+        mean_budget = Project.objects.mean_budget(area)
+        return Response({"budget_mean": mean_budget}, status=status.HTTP_200_OK)

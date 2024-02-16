@@ -4,6 +4,7 @@ from app.entities.project import Project
 from django.utils.translation import gettext_lazy as _
 from app.utils.validators import *
 import uuid
+from app.managers.proposal_manager import ProposalManager
 
 SITUATION_CHOICES = [
     ("W",_("Waiting")),
@@ -24,21 +25,17 @@ class Proposal(models.Model):
     accepted_at = models.DateTimeField(null=True, blank=True, verbose_name=_('Accepted Date'))
     paid_date = models.DateTimeField(null=True, blank=True, verbose_name=_('Paid Date'))
 
+    objects = ProposalManager()
+
     def calculate_discounted_value(self):
         discount_percentage = 0.05
         discounted_value = self.budget * (1 - discount_percentage)
         return discounted_value
 
-    def proposal_accepted(self): 
-        return self.situation == 'S' and not self.accepted_at;
-
-    def is_paid(self):
-        return self.is_paid == True and not self.paid_date;
-
     def save(self, *args, **kwargs):
-        if self.proposal_accepted(self):  
+        if self.situation == 'S' and not self.accepted_at:
             self.accepted_at = timezone.now()
-        if self.is_paid(self):
+        if self.is_paid and not self.paid_date:
             self.paid_date = timezone.now()
         self.discounted_value = self.calculate_discounted_value()
         super().save(*args, **kwargs)
