@@ -34,7 +34,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     def create(self, request,*args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(user=request.user)
+        serializer.save(employer=request.user)
         return Response({"message":_("Job created successfully.")},status=status.HTTP_201_CREATED)
 
     def update(self, serializer,*args, **kwargs):

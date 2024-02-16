@@ -41,7 +41,7 @@ class ProposalViewSet(viewsets.ModelViewSet):
             raise ValidationError(_({"message":"You have already submitted a proposal for this project."},code='invalid'))
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(user=request.user)
+        serializer.save(freelancer=request.user)
         return Response({"message":_("Proposal created successfully.")}, status=status.HTTP_201_CREATED)
 
     def update(self, serializer,*args, **kwargs):

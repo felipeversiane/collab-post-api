@@ -21,23 +21,17 @@ class Proposal(models.Model):
     submitted_at = models.DateTimeField(auto_now_add=True,null=False, blank=False,verbose_name=_('Project'))
     situation = models.CharField(max_length=1,default='W',null=False, blank=False,choices=SITUATION_CHOICES,verbose_name=_('Situation'),validators=[validate_first_letter])
     is_paid = models.BooleanField(default=False,null=False, blank=False)
-    discounted_value = models.DecimalField(max_digits=10, null=False, blank=False, decimal_places=2, verbose_name=_('Discounted Value'),validators=[validate_value])
     accepted_at = models.DateTimeField(null=True, blank=True, verbose_name=_('Accepted Date'))
     paid_date = models.DateTimeField(null=True, blank=True, verbose_name=_('Paid Date'))
 
     objects = ProposalManager()
 
-    def calculate_discounted_value(self):
-        discount_percentage = 0.05
-        discounted_value = self.budget * (1 - discount_percentage)
-        return discounted_value
 
     def save(self, *args, **kwargs):
         if self.situation == 'S' and not self.accepted_at:
             self.accepted_at = timezone.now()
         if self.is_paid and not self.paid_date:
             self.paid_date = timezone.now()
-        self.discounted_value = self.calculate_discounted_value()
         super().save(*args, **kwargs)
 
     class Meta:
