@@ -12,6 +12,12 @@ class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
 
+    def get_serializer_class(self):
+        if self.action not in ['list','read']:
+            return ProjectSerializer
+        else :
+            return ReadOnlyProjectSerializer
+            
     def get_permissions(self):
         if self.action != 'list':
             permission_classes = [IsAuthenticated]

@@ -36,7 +36,10 @@ class ProposalViewSet(viewsets.ModelViewSet):
     
     def create(self, request, *args, **kwargs):
         project_id = request.data.get('project')
+        project = Project.objects.filter(uuid=project_id)
         existing_proposals = Proposal.objects.filter(project=project_id, freelancer=request.user)
+        if project.employer == request.user:
+            raise ValidationError(_({"message":"You can't submit a proposal of your own project."},code='invalid')) 
         if existing_proposals.exists():
             raise ValidationError(_({"message":"You have already submitted a proposal for this project."},code='invalid'))
         serializer = self.get_serializer(data=request.data)
