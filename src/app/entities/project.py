@@ -20,7 +20,7 @@ AREA_CHOICES = [
 ]
 
 class Project(models.Model):
-
+    
     uuid = models.UUIDField(primary_key=True, unique=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=60,null=False, blank=False, verbose_name=_('Title'),validators=[validate_first_letter,validate_letters,validate_safe_text])
     description = models.TextField(max_length=200,null=False, blank=False,verbose_name=_('Description'),validators=[validate_first_letter,validate_safe_text])
@@ -39,6 +39,7 @@ class Project(models.Model):
     class Meta:
         verbose_name = _('Project')
         verbose_name_plural = _('Projects')
+        ordering = 'created_at'
 
     def __str__(self):
         return "{}-{}".format(self.title,self.budget)
