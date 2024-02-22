@@ -17,4 +17,5 @@
     social-auth-app-django
     social-auth-core
     pytest
-    Sphinx
+    sphinx
+    sphinx-rtd-theme
