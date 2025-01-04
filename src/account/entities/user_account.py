@@ -46,7 +46,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     headline = models.CharField(max_length=60, null=False, blank=True, verbose_name=_('Headline'), validators=[validate_first_letter])
     bio = models.TextField(blank=True, null=False)
     phone_number = models.CharField(max_length=15, verbose_name=_('Phone Number'), blank=True, null=False, validators=[validate_phone])
-
+    
     objects = UserAccountManager()
 
     USERNAME_FIELD = 'email'

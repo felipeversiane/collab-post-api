@@ -22,7 +22,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         if self.action != 'list':
             permission_classes = [IsAuthenticated]
         else:
-            permission_classes = [AllowAny]
+            permission_classes = [AllowAny] 
         return [permission() for permission in permission_classes]
 
     def list(self,request,*args, **kwargs):
